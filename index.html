@@ -61,10 +61,6 @@
         /* --- GESTION DES PAGES (SPA) --- */
         .page { display: none; padding: 60px 0; animation: fadeIn 0.5s ease forwards; }
         .page.active { display: block; }
-        
-        /* Spécifique pour l'Accueil pour le centrage vertical */
-        #accueil.active { display: flex; flex-direction: column; justify-content: center; min-height: 70vh; }
-
         @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
         /* --- BOUTONS --- */
@@ -141,7 +137,6 @@
         .wix-card-img { width: 100%; height: 220px; object-fit: cover; border-bottom: 1px solid var(--border); border-radius: 4px 4px 0 0; }
         .wix-card-content { padding: 30px; display: flex; flex-direction: column; flex-grow: 1; }
         .wix-card-title { font-size: 1.6rem; line-height: 1.2; margin-bottom: 15px; }
-        .wix-card-desc { font-size: 1.05rem; margin-bottom: 25px; flex-grow: 1; opacity: 0.85; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;}
         .wix-card-footer { display: flex; align-items: center; border-top: 1px solid var(--border); padding-top: 15px; margin-top: auto;}
         .wix-avatar { width: 35px; height: 35px; border-radius: 50%; background: #cccccc; margin-right: 12px; flex-shrink: 0; display:flex; align-items:center; justify-content:center;}
         .wix-meta-text { display: flex; flex-direction: column; }
@@ -215,12 +210,14 @@
     <main class="container">
         
         <section id="accueil" class="page active">
-            <div class="text-center mb-40">
-                <h1 style="font-size: 4rem; margin-bottom: 10px;">David Gaspar Oliveira</h1>
-                <p class="subtitle" style="margin: 0 auto; font-size: 1.3rem;">Étudiant en 2ème année de BTS SIO (Option SLAM).<br>Solutions Logicielles et Applications Métiers.</p>
-                <div style="display:flex; justify-content:center; gap:20px; flex-wrap: wrap; margin-top: 40px;">
-                    <button onclick="showPage('projets')" class="btn btn-primary" style="padding: 15px 35px; font-size: 1.15rem;">Voir mes réalisations</button>
-                    <a href="https://github.com/David6104" target="_blank" class="btn btn-outline" style="padding: 15px 35px; font-size: 1.15rem;"><i class="fa-brands fa-github"></i> Mon GitHub</a>
+            <div style="min-height: 70vh; display: flex; flex-direction: column; justify-content: center;">
+                <div class="text-center mb-40">
+                    <h1 style="font-size: 4rem; margin-bottom: 10px;">David Gaspar Oliveira</h1>
+                    <p class="subtitle" style="margin: 0 auto; font-size: 1.3rem;">Étudiant en 2ème année de BTS SIO (Option SLAM).<br>Solutions Logicielles et Applications Métiers.</p>
+                    <div style="display:flex; justify-content:center; gap:20px; flex-wrap: wrap; margin-top: 40px;">
+                        <button onclick="showPage('projets')" class="btn btn-primary" style="padding: 15px 35px; font-size: 1.15rem;">Voir mes réalisations</button>
+                        <a href="https://github.com/David6104" target="_blank" class="btn btn-outline" style="padding: 15px 35px; font-size: 1.15rem;"><i class="fa-brands fa-github"></i> Mon GitHub</a>
+                    </div>
                 </div>
             </div>
         </section>
@@ -263,32 +260,30 @@
 
         <section id="veille" class="page">
             <div class="veille-header-box">
-                <h1>L'informatique quantique :<br>Une révolution numérique à venir ?</h1>
+                <h1>L'Intelligence Artificielle :<br>Outil du développeur et arme de cyberattaque</h1>
             </div>
 
             <div class="veille-hero split-layout">
-                <p>L’informatique quantique, grâce à ses qubits, offre une puissance de calcul inégalée, transformant la cybersécurité, l’optimisation des ressources IT et l’analyse massive de données. Découvrez ma veille sur ces enjeux critiques pour l'IT de demain.</p>
-                <img src="2ab16a_af7f505d1dae409b99c6243e3d66d235~mv2.avif" alt="Informatique Quantique">
+                <p>L'intelligence artificielle redéfinit la manière dont nous concevons et écrivons des logiciels. Entre l'automatisation des tâches pour le développeur et l'intensification des cyberattaques facilitées par l'IA, découvrez ma veille technologique sur cette dualité qui marque notre futur métier.</p>
+                <img src="https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=800" alt="IA et Développement">
             </div>
 
-            <div class="grid-3" id="veille-grid"></div>
+            <div class="grid-2" id="veille-grid"></div>
         </section>
 
         <section id="veille-details" class="page">
             <button onclick="showPage('veille')" class="btn btn-outline mb-40"><i class="fa-solid fa-arrow-left"></i> Retour à la veille</button>
             
             <div style="max-width: 800px; margin: 0 auto; text-align: center; background: var(--surface-color); padding: 40px; border-radius: 8px; border: 1px solid var(--border); box-shadow: var(--shadow-sm);">
-                <h1 id="vd-title" style="font-size: 2.5rem;">Titre Article</h1>
+                <h1 id="vd-title" style="font-size: 2.5rem; margin-bottom: 20px;">Titre Article</h1>
                 
                 <div class="wix-meta-text mb-40" style="align-items: center; flex-direction: row; justify-content: center; gap: 10px;">
                     <div class="wix-avatar"><i class="fa-solid fa-user" style="color:white; font-size:14px;"></i></div>
-                    <span class="wix-author" style="font-size: 1.1rem;">davidgasparoliveir</span>
+                    <span class="wix-author" style="font-size: 1.1rem;">davidgasparoliveira</span>
                     <span class="wix-date" id="vd-date" style="font-size: 1rem;">Date</span>
                 </div>
 
                 <img id="vd-img" src="" style="width: 100%; border-radius: 8px; margin-bottom: 40px; box-shadow: var(--shadow-md);">
-                
-                <div id="vd-desc" style="font-size: 1.2rem; text-align: left; margin-bottom: 40px;"></div>
                 
                 <a id="vd-link" href="" target="_blank" class="btn btn-primary" style="font-size: 1.2rem; padding: 15px 40px;">
                     Lire l'article complet sur le site source <i class="fa-solid fa-external-link-alt"></i>
@@ -297,7 +292,7 @@
         </section>
 
         <section id="contact" class="page">
-            <h1 class="text-center mb-40">Profil & Contact</h1>
+            <h1 class="text-center mb-40">À propos</h1>
             
             <div class="grid-2 mb-40">
                 <div class="project-content-block">
@@ -374,14 +369,14 @@
         const projectsData = {
             'stage2': {
                 title: "Stage de 2ème année", 
-                subtitle: "Développement Web & Applicatif • E.T.S.E",
+                subtitle: "Projet • Web & Applicatif • E.T.S.E",
                 cover: "carte-entreprise.png",
                 shortDesc: "Site Web & Logiciel Python/OpenCV", 
                 techs: ["HTML/CSS/JS", "Python", "OpenCV"],
                 summary: "Ce projet comprend deux parties majeures : le développement d'un site web institutionnel moderne en HTML/CSS/JS et la création d'un outil métier en Python. L'application utilise OpenCV pour détecter les ouvertures sur des plans d'architecte et calcule automatiquement la surface à enduire.",
                 links: [
-                    { url: "https://github.com/David6104/mon-projet-stage-2eme-annee.git", label: "Code Source", icon: "fa-brands fa-github", type: "btn-outline" },
-                    { url: "https://etse-facades.netlify.app/", label: "Voir le Site Live", icon: "fa-solid fa-globe", type: "btn-primary" },
+                    { url: "https://github.com/David6104/mon-projet-stage-2eme-annee.git", label: "Lien GitHub", icon: "fa-brands fa-github", type: "btn-outline" },
+                    { url: "https://etse-facades.netlify.app/", label: "Voir le Site", icon: "fa-solid fa-globe", type: "btn-primary" },
                     { url: "David_GASPAR_OLIVEIRA_rapport_de_stage_2eme_annee.pdf", label: "Rapport de Stage", icon: "fa-solid fa-file-pdf", type: "btn-outline" }
                 ],
                 media: [
@@ -463,7 +458,7 @@
                 techs: ["Flutter", "Dart", "API"],
                 summary: "Développement d'une application e-commerce mobile hybride en Flutter/Dart. Elle intègre la consultation d'articles via une API (Platzi Fake Store), un système d'authentification, la gestion d'un panier et des favoris avec persistance des données, ainsi qu'un historique d'achats.",
                 links: [
-                    { url: "https://github.com/David6104/projet_flutter.git", label: "Code Source", icon: "fa-brands fa-github", type: "btn-primary" }
+                    { url: "https://github.com/David6104/projet_flutter.git", label: "Lien GitHub", icon: "fa-brands fa-github", type: "btn-primary" }
                 ],
                 media: [
                     { type: "image", src: "articles-flutter.png", title: "Catalogue d'Articles", desc: "Liste des produits récupérés via API (Platzi Fake Store). Navigation fluide avec possibilité de voir les fiches détaillées des produits." },
@@ -480,7 +475,7 @@
                 techs: ["PHP", "SQL", "Web"],
                 summary: "Développement d'une application web centralisée pour la gestion des adhérents d'une association d'arts martiaux. Mise en place d'un système CRUD complet, d'une authentification sécurisée et de filtres de recherche avancés (WAMP, PHP, MySQL).",
                 links: [
-                    { url: "https://github.com/David6104/mon-projet-stage-1ere-annee", label: "Code Source", icon: "fa-brands fa-github", type: "btn-primary" },
+                    { url: "https://github.com/David6104/mon-projet-stage-1ere-annee", label: "Lien GitHub", icon: "fa-brands fa-github", type: "btn-primary" },
                     { url: "rapport de stage David GASPAR OLIVEIRA.pdf", label: "Rapport de Stage", icon: "fa-solid fa-file-pdf", type: "btn-outline" }
                 ],
                 media: [
@@ -506,7 +501,7 @@
                 techs: ["PHP", "SQL"],
                 summary: "Conception d’un site web dynamique (Pokédex) permettant d’afficher, de gérer et de modifier des données complexes. Ce projet met en œuvre des opérations CRUD sécurisées en PHP liées à une base de données relationnelle.",
                 links: [
-                    { url: "https://github.com/David6104/Pokedex.git", label: "Code Source", icon: "fa-brands fa-github", type: "btn-primary" }
+                    { url: "https://github.com/David6104/Pokedex.git", label: "Lien GitHub", icon: "fa-brands fa-github", type: "btn-primary" }
                 ],
                 media: [
                     {
@@ -530,25 +525,16 @@
         // --- DONNÉES DE LA VEILLE ---
         const veilleData = {
             'v1': {
-                title: "L'informatique en 2026 : entre quête de durabilité et révolution quantique",
-                date: "25 mars • 1 min de lecture",
-                cover: "https://static.wixstatic.com/media/2ab16a_bf54c8dccfe84d838f324c4732b6190a~mv2.png",
-                desc: "Analyse des enjeux actuels alliant puissance de calcul inouïe et contraintes énergétiques imposées par la transition écologique.",
-                link: "https://vimotic.net/blog/linformatique-en-2026-entre-quete-de-durabilite-et-revolution-quantique"
+                title: "« Un seul développeur peut piloter une constellation d'agents de code » : le développement à l'ère de l'IA",
+                date: "Mars 2026 • Blog du Modérateur",
+                cover: "https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=800",
+                link: "https://www.blogdumoderateur.com/ia-copilote-code-developpement-web-nouvelle-ere/"
             },
             'v2': {
-                title: "Tout le monde s'attendait à une révolution quantique en 2026, la vraie surprise est ailleurs",
-                date: "25 mars • 1 min de lecture",
-                cover: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?q=80&w=800",
-                desc: "Retour sur les promesses technologiques : la vraie surprise est bien plus discrète que prévu. Décryptage des avancées réelles.",
-                link: "https://dailygeekshow.com/tout-le-monde-sattendait-a-une-revolution-quantique-en-2026-mais-la-vraie-surprise-est-ailleurs-bien-plus-discrete/"
-            },
-            'v3': {
-                title: "Ordinateur quantique : cas d’usage à expérimenter et ruptures pour 2030",
-                date: "19 mars • 1 min de lecture",
-                cover: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=800",
-                desc: "Comment les entreprises s'adaptent face à l'émergence des technologies quantiques et anticipent les ruptures structurelles à venir.",
-                link: "https://lehub.bpifrance.fr/ordinateur-quantique-des-cas-dusage-a-experimenter-aujourdhui-des-ruptures-a-preparer-pour-2030/"
+                title: "L'IA aggrave les défis de sécurité selon le CTO de Ledger",
+                date: "Avril 2026 • CoinDesk",
+                cover: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&w=800",
+                link: "https://www.coindesk.com/fr/tech/2026/04/05/ai-is-making-crypto-s-security-problem-even-worse-ledger-cto-warns"
             }
         };
 
@@ -583,11 +569,10 @@
                         <img src="${data.cover}" alt="${data.title}" class="wix-card-img">
                         <div class="wix-card-content">
                             <h3 class="wix-card-title">${data.title}</h3>
-                            <p class="wix-card-desc">${data.desc}</p>
                             <div class="wix-card-footer">
                                 <div class="wix-avatar"><i class="fa-solid fa-user" style="color:white; font-size:12px;"></i></div>
                                 <div class="wix-meta-text">
-                                    <span class="wix-author">davidgasparoliveir</span>
+                                    <span class="wix-author">davidgasparoliveira</span>
                                     <span class="wix-date">${data.date}</span>
                                 </div>
                             </div>
@@ -685,9 +670,7 @@
             if(!article) return;
 
             document.getElementById('vd-title').innerText = article.title;
-            document.getElementById('vd-date').innerText = article.date;
-            document.getElementById('vd-img').src = article.cover;
-            document.getElementById('vd-desc').innerText = article.desc;
+            // Pas d'image ici comme vu avant, seulement un lien propre vers la ressource externe
             document.getElementById('vd-link').href = article.link;
 
             showPage('veille-details');
