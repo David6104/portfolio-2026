@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio | David Gaspar Oliveira</title>
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,700;1,400&family=Quicksand:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* --- VARIABLES THEME WIX --- */
+        :root {
+            --bg-color: #F7F5F0;       /* Fond crème */
+            --surface-color: #ffffff;  /* Blanc pur */
+            --text-main: #496E83;      /* Bleu Ardoise */
+            --accent-color: #80B1FF;   /* Bleu clair */
+            --border: rgba(73, 110, 131, 0.2); 
+            --shadow-md: 0 10px 20px -5px rgba(73, 110, 131, 0.2);
+            --shadow-sm: 0 4px 6px -1px rgba(73, 110, 131, 0.1);
+            --font-title: 'EB Garamond', serif;
+            --font-body: 'Quicksand', sans-serif;
+            --font-code: 'Fira Code', monospace;
+            --transition: all 0.3s ease;
+        }
+
+        /* --- RESET & BASE --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: var(--font-body);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+        .text-center { text-align: center; }
+        .mt-20 { margin-top: 20px; } .mt-40 { margin-top: 40px; }
+        .mb-20 { margin-bottom: 20px; } .mb-40 { margin-bottom: 40px; }
+        
+        h1, h2, h3, h4 { font-family: var(--font-title); font-weight: 500; color: var(--text-main); }
+        h1 { font-size: 3.5rem; text-align: center; margin-bottom: 20px; line-height: 1.1; }
+        h2 { font-size: 2.8rem; margin-bottom: 25px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+        p { font-size: 1.1rem; }
+
+        /* --- NAVIGATION --- */
+        header {
+            padding: 20px 0; position: sticky; top: 0;
+            background: rgba(247, 245, 240, 0.95); backdrop-filter: blur(10px);
+            z-index: 1000; border-bottom: 1px solid var(--border);
+        }
+        nav ul { display: flex; justify-content: center; gap: 40px; list-style: none; }
+        nav a {
+            text-decoration: none; color: var(--text-main);
+            font-size: 1.1rem; font-weight: 600; cursor: pointer;
+            transition: var(--transition); opacity: 0.7; text-transform: uppercase; letter-spacing: 1px;
+        }
+        nav a:hover, nav a.active { opacity: 1; border-bottom: 2px solid var(--text-main); padding-bottom: 4px; }
+
+        /* --- GESTION DES PAGES (SPA) --- */
+        .page { display: none; padding: 60px 0; animation: fadeIn 0.5s ease forwards; }
+        .page.active { display: block; }
+        
+        /* Spécifique pour l'Accueil pour le centrage vertical */
+        #accueil.active { display: flex; flex-direction: column; justify-content: center; min-height: 70vh; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- BOUTONS --- */
+        .btn {
+            display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+            padding: 12px 28px; border-radius: 4px; font-weight: 600; font-size: 1.05rem;
+            text-decoration: none; transition: var(--transition); cursor: pointer;
+            border: 1px solid var(--text-main); font-family: var(--font-body);
+        }
+        .btn-primary { background: var(--text-main); color: var(--bg-color); }
+        .btn-primary:hover { background: transparent; color: var(--text-main); }
+        .btn-outline { background: transparent; color: var(--text-main); }
+        .btn-outline:hover { background: var(--text-main); color: var(--bg-color); }
+        .btn-danger { background: #ef4444; color: white; border-color: #ef4444; }
+        .btn-danger:hover { background: #dc2626; border-color: #dc2626; color: white; }
+
+        /* --- GRILLES STANDARDS --- */
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px; }
+
+        /* --- GRILLE PROJETS (Style Code Overlay) --- */
+        .portfolio-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; }
+        .portfolio-item {
+            position: relative; background: #fff; border-radius: 8px; overflow: hidden;
+            cursor: pointer; box-shadow: var(--shadow-sm); transition: var(--transition);
+            aspect-ratio: 1/1; border: 1px solid var(--border);
+        }
+        .portfolio-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; background: #fff;}
+        .portfolio-item-overlay {
+            position: absolute; inset: 0; background: rgba(15, 23, 42, 0.95);
+            color: #a7f3d0; font-family: var(--font-code);
+            display: flex; flex-direction: column; justify-content: center; align-items: flex-start;
+            padding: 30px; opacity: 0; transition: var(--transition);
+        }
+        .portfolio-item:hover img { transform: scale(1.05); filter: blur(3px) grayscale(50%); }
+        .portfolio-item:hover .portfolio-item-overlay { opacity: 1; }
+        .code-title { color: #38bdf8; font-size: 1.2rem; margin-bottom: 15px; }
+        .code-line { margin-bottom: 5px; font-size: 0.95rem; }
+        .code-key { color: #f472b6; }
+        .code-string { color: #a3e635; }
+
+        /* --- DÉTAIL D'UN PROJET (ÉPURÉ) --- */
+        .project-detail-header { margin-bottom: 40px; }
+        .project-summary-box {
+            background: var(--surface-color); padding: 30px 40px; border-radius: 8px;
+            border: 1px solid var(--border); box-shadow: var(--shadow-sm); margin: 40px auto; max-width: 900px; text-align: center;
+        }
+        .project-summary-box p { font-size: 1.15rem; line-height: 1.8; margin: 0; color: var(--text-main); }
+        .project-content-block { background: var(--surface-color); padding: 40px; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 30px; font-size: 1.1rem; box-shadow: var(--shadow-sm);}
+        
+        /* Galerie d'images et vidéos */
+        .project-gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; margin-top: 40px; }
+        .gallery-img-wrapper { position: relative; cursor: pointer; overflow: hidden; border-radius: 8px; border: 1px solid var(--border); aspect-ratio: 4/3; background: #fff; box-shadow: var(--shadow-sm);}
+        .gallery-img-wrapper img, .gallery-img-wrapper video { width: 100%; height: 100%; object-fit: contain; transition: var(--transition); padding: 10px;}
+        .gallery-img-wrapper:hover img, .gallery-img-wrapper:hover video { transform: scale(1.05); filter: brightness(0.8);}
+        .gallery-img-wrapper::after { content: '\f0b2'; font-family: 'FontAwesome'; position: absolute; inset: 0; background: rgba(73, 110, 131, 0.6); color: white; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; opacity: 0; transition: var(--transition); pointer-events: none;}
+        .gallery-img-wrapper:hover::after { opacity: 1; }
+        .play-icon-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 3rem; color: white; opacity: 0.8; pointer-events: none; text-shadow: 0 2px 10px rgba(0,0,0,0.5);}
+
+        /* --- EN-TÊTE VEILLE --- */
+        .veille-header-box { background: var(--text-main); padding: 60px 24px; text-align: center; border-radius: 8px 8px 0 0; }
+        .veille-header-box h1 { color: #ffffff; margin: 0; font-size: 3.5rem; }
+        .veille-hero { display: flex; align-items: center; gap: 40px; margin-bottom: 60px; background: var(--surface-color); padding: 40px; border-radius: 0 0 8px 8px; border: 1px solid var(--border); border-top: none; box-shadow: var(--shadow-sm);}
+        .veille-hero p { flex: 1; font-size: 1.25rem; font-weight: 500; opacity: 0.9;}
+        .veille-hero img { flex: 1; width: 100%; max-width: 450px; border-radius: 8px; box-shadow: var(--shadow-md); object-fit: cover;}
+
+        /* --- CARTES VEILLE WIX --- */
+        .wix-card {
+            background: var(--surface-color); border: 1px solid var(--border);
+            display: flex; flex-direction: column; text-decoration: none; color: inherit;
+            transition: var(--transition); height: 100%; border-radius: 4px; cursor: pointer; box-shadow: var(--shadow-sm);
+        }
+        .wix-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-md); border-color: var(--text-main); }
+        .wix-card-img { width: 100%; height: 220px; object-fit: cover; border-bottom: 1px solid var(--border); border-radius: 4px 4px 0 0; }
+        .wix-card-content { padding: 30px; display: flex; flex-direction: column; flex-grow: 1; }
+        .wix-card-title { font-size: 1.6rem; line-height: 1.2; margin-bottom: 15px; }
+        .wix-card-desc { font-size: 1.05rem; margin-bottom: 25px; flex-grow: 1; opacity: 0.85; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;}
+        .wix-card-footer { display: flex; align-items: center; border-top: 1px solid var(--border); padding-top: 15px; margin-top: auto;}
+        .wix-avatar { width: 35px; height: 35px; border-radius: 50%; background: #cccccc; margin-right: 12px; flex-shrink: 0; display:flex; align-items:center; justify-content:center;}
+        .wix-meta-text { display: flex; flex-direction: column; }
+        .wix-author { font-size: 0.9rem; font-weight: 700; }
+        .wix-date { font-size: 0.8rem; opacity: 0.7; display: flex; align-items: center; gap: 5px; font-weight: 600;}
+
+        /* --- MODAL IMAGE / VIDEO --- */
+        .modal {
+            display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.95);
+            z-index: 9999; flex-direction: row; opacity: 0; transition: opacity 0.3s ease;
+        }
+        .modal.active { display: flex; opacity: 1; }
+        .modal-image-section { flex: 3; display: flex; align-items: center; justify-content: center; padding: 40px; position: relative; cursor: zoom-out;}
+        .modal-image-section img, .modal-image-section video { max-width: 100%; max-height: 90vh; object-fit: contain; box-shadow: 0 0 30px rgba(0,0,0,0.5); border-radius: 8px; background: white; padding: 10px;}
+        .modal-text-section {
+            flex: 1; min-width: 400px; background: var(--bg-color); padding: 50px 40px;
+            display: flex; flex-direction: column; justify-content: center;
+            border-left: 1px solid var(--border); overflow-y: auto; position: relative;
+        }
+        .modal-text-section h3 { font-size: 2.2rem; margin-bottom: 20px; }
+        .modal-text-section .modal-desc-content { font-size: 1.1rem; opacity: 0.9; margin-bottom: 40px; white-space: pre-line; }
+
+        /* Navigation dans la modale */
+        .modal-nav-btn {
+            position: absolute; top: 50%; transform: translateY(-50%);
+            background: rgba(255,255,255,0.1); color: white; border: none;
+            width: 50px; height: 50px; border-radius: 50%; font-size: 1.5rem;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            transition: var(--transition); z-index: 10001;
+        }
+        .modal-nav-btn:hover { background: var(--accent-color); }
+        .modal-prev { left: 20px; }
+        .modal-next { right: 20px; }
+
+        /* --- CONTACT & A PROPOS --- */
+        .contact-box { text-align: center; padding: 60px 40px; border: 1px solid var(--border); background: var(--surface-color); margin: 0 auto; border-radius: 8px; box-shadow: var(--shadow-sm);}
+        .contact-links { margin-top: 30px; display: flex; justify-content: center; gap: 40px; }
+        .contact-links a { font-size: 3rem; color: var(--text-main); transition: var(--transition); }
+        .contact-links a:hover { color: var(--accent-color); transform: translateY(-5px); }
+
+        .about-list { list-style: none; line-height: 2; font-size: 1.1rem; text-align: left;}
+        .about-list li { margin-bottom: 10px; }
+        .about-list i { color: var(--accent-color); width: 25px; text-align: center; margin-right: 10px; }
+
+        @media (max-width: 768px) {
+            .grid-2 { grid-template-columns: 1fr; }
+            .veille-hero { flex-direction: column; text-align: center; gap: 20px; padding: 20px;}
+            .veille-header-box h1 { font-size: 2.2rem; }
+            .modal { flex-direction: column; }
+            .modal-image-section { padding: 20px; flex: 2; }
+            .modal-text-section { flex: 1; min-width: 100%; border-left: none; border-top: 1px solid var(--border); padding: 30px 20px;}
+            .modal-nav-btn { display: none !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container" style="padding: 0 24px; margin: 0 auto;">
+            <nav>
+                <ul>
+                    <li><a class="nav-link active" onclick="showPage('accueil')">Accueil</a></li>
+                    <li><a class="nav-link" onclick="showPage('projets')">Projets</a></li>
+                    <li><a class="nav-link" onclick="showPage('veille')">Veille</a></li>
+                    <li><a class="nav-link" onclick="showPage('contact')">Profil</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        
+        <section id="accueil" class="page active">
+            <div class="text-center mb-40">
+                <h1 style="font-size: 4rem; margin-bottom: 10px;">David Gaspar Oliveira</h1>
+                <p class="subtitle" style="margin: 0 auto; font-size: 1.3rem;">Étudiant en 2ème année de BTS SIO (Option SLAM).<br>Solutions Logicielles et Applications Métiers.</p>
+                <div style="display:flex; justify-content:center; gap:20px; flex-wrap: wrap; margin-top: 40px;">
+                    <button onclick="showPage('projets')" class="btn btn-primary" style="padding: 15px 35px; font-size: 1.15rem;">Voir mes réalisations</button>
+                    <a href="https://github.com/David6104" target="_blank" class="btn btn-outline" style="padding: 15px 35px; font-size: 1.15rem;"><i class="fa-brands fa-github"></i> Mon GitHub</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="projets" class="page">
+            <div class="text-center mb-40">
+                <h1>Mes projets</h1>
+                <p class="subtitle" style="margin: 0 auto;">Bienvenue sur mon portfolio. Cliquez sur les cartes pour afficher la galerie et les détails de chaque projet.</p>
+            </div>
+
+            <div class="portfolio-grid" id="projects-grid"></div>
+        </section>
+
+        <section id="projet-details" class="page">
+            <button onclick="showPage('projets')" class="btn btn-outline mb-20"><i class="fa-solid fa-arrow-left"></i> Retour aux projets</button>
+            
+            <div class="project-detail-header text-center">
+                <h1 id="detail-title" style="font-size: 3rem; margin-bottom: 10px;">Titre du projet</h1>
+                <p class="subtitle" id="detail-subtitle" style="margin: 0 auto; color: var(--accent-color);">Sous-titre</p>
+                
+                <div style="margin-top: 30px; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;" id="detail-links">
+                    </div>
+            </div>
+
+            <div class="project-summary-box">
+                <p id="detail-summary"></p>
+            </div>
+
+            <h2 style="border:none; text-align: center; margin-top: 40px;">Galerie du projet</h2>
+            <p class="text-center text-muted mb-40" style="opacity: 0.8;"><i>Cliquez sur les médias ci-dessous pour les afficher en plein écran et lire les détails.</i></p>
+
+            <div class="project-gallery" id="detail-gallery">
+                </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 30px; margin-top: 60px;">
+                <button id="prev-project-btn" class="btn btn-outline"><i class="fa-solid fa-chevron-left"></i> Projet précédent</button>
+                <button id="next-project-btn" class="btn btn-primary">Projet suivant <i class="fa-solid fa-chevron-right"></i></button>
+            </div>
+        </section>
+
+        <section id="veille" class="page">
+            <div class="veille-header-box">
+                <h1>L'informatique quantique :<br>Une révolution numérique à venir ?</h1>
+            </div>
+
+            <div class="veille-hero split-layout">
+                <p>L’informatique quantique, grâce à ses qubits, offre une puissance de calcul inégalée, transformant la cybersécurité, l’optimisation des ressources IT et l’analyse massive de données. Découvrez ma veille sur ces enjeux critiques pour l'IT de demain.</p>
+                <img src="2ab16a_af7f505d1dae409b99c6243e3d66d235~mv2.avif" alt="Informatique Quantique">
+            </div>
+
+            <div class="grid-3" id="veille-grid"></div>
+        </section>
+
+        <section id="veille-details" class="page">
+            <button onclick="showPage('veille')" class="btn btn-outline mb-40"><i class="fa-solid fa-arrow-left"></i> Retour à la veille</button>
+            
+            <div style="max-width: 800px; margin: 0 auto; text-align: center; background: var(--surface-color); padding: 40px; border-radius: 8px; border: 1px solid var(--border); box-shadow: var(--shadow-sm);">
+                <h1 id="vd-title" style="font-size: 2.5rem;">Titre Article</h1>
+                
+                <div class="wix-meta-text mb-40" style="align-items: center; flex-direction: row; justify-content: center; gap: 10px;">
+                    <div class="wix-avatar"><i class="fa-solid fa-user" style="color:white; font-size:14px;"></i></div>
+                    <span class="wix-author" style="font-size: 1.1rem;">davidgasparoliveir</span>
+                    <span class="wix-date" id="vd-date" style="font-size: 1rem;">Date</span>
+                </div>
+
+                <img id="vd-img" src="" style="width: 100%; border-radius: 8px; margin-bottom: 40px; box-shadow: var(--shadow-md);">
+                
+                <div id="vd-desc" style="font-size: 1.2rem; text-align: left; margin-bottom: 40px;"></div>
+                
+                <a id="vd-link" href="" target="_blank" class="btn btn-primary" style="font-size: 1.2rem; padding: 15px 40px;">
+                    Lire l'article complet sur le site source <i class="fa-solid fa-external-link-alt"></i>
+                </a>
+            </div>
+        </section>
+
+        <section id="contact" class="page">
+            <h1 class="text-center mb-40">Profil & Contact</h1>
+            
+            <div class="grid-2 mb-40">
+                <div class="project-content-block">
+                    <h2 style="border:none; margin-bottom:15px; font-size: 2.2rem;">Bref résumé</h2>
+                    <p style="margin-bottom: 20px; text-align: justify;">Je m'appelle David Gaspar Oliveira et je suis actuellement en 2ème année de BTS SIO avec option SLAM.<br><br>Mon apprentissage dans cette formation me permet de renforcer mes compétences en développement et maintenance de logiciel, domaine qui attise ma curiosité.</p>
+                    
+                    <h2 style="border:none; margin-bottom:15px; margin-top: 40px; font-size: 2.2rem;">Formation</h2>
+                    <ul class="about-list" style="margin-bottom: 30px;">
+                        <li><i class="fa-solid fa-graduation-cap" style="color:var(--text-main); width:30px;"></i> <strong>BTS SIO option SLAM :</strong> En cours</li>
+                        <li><i class="fa-solid fa-school" style="color:var(--text-main); width:30px;"></i> <strong>Baccalauréat général :</strong> Spécialité AMC et NSI</li>
+                    </ul>
+
+                    <a href="CV 2026 David GASPAR OLIVEIRA.pdf" target="_blank" class="btn btn-primary mt-20" style="width: 100%;">
+                        <i class="fa-solid fa-file-pdf"></i> Consulter mon CV
+                    </a>
+                </div>
+
+                <div class="project-content-block">
+                    <h2 style="border:none; margin-bottom:15px; font-size: 2.2rem;">Mes Compétences</h2>
+                    <ul class="about-list" style="margin-bottom: 30px;">
+                        <li><i class="fa-solid fa-code"></i> <strong>Langages :</strong> Python, PHP, C#, HTML/CSS, JS/TS, Dart</li>
+                        <li><i class="fa-solid fa-database"></i> <strong>BDD :</strong> SQL, MySQL</li>
+                        <li><i class="fa-solid fa-toolbox"></i> <strong>Outils :</strong> Postman, Git, GitHub, WAMP, VScode</li>
+                    </ul>
+
+                    <h2 style="border:none; margin-bottom:15px; margin-top: 40px; font-size: 2.2rem;">Mes Certifications</h2>
+                    <ul class="about-list">
+                        <li><i class="fa-solid fa-certificate"></i> Pix</li>
+                        <li><i class="fa-solid fa-certificate"></i> MOOC - SecNum académie (ANSSI)</li>
+                        <li><i class="fa-solid fa-certificate"></i> Microsoft Learn : Intro à GitHub, Git et produits GitHub</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="contact-box mt-40">
+                <h2 style="border:none; margin-bottom:20px; font-size: 2.2rem;">Mes liens</h2>
+                <div class="contact-links">
+                    <a href="https://github.com/David6104" target="_blank" title="Mon GitHub"><i class="fa-brands fa-github"></i></a>
+                    <a href="https://www.linkedin.com/in/david-gaspar-oliveira-63a165341" target="_blank" title="Mon LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+                    <a href="mailto:gaspar.oliveira.david@gmail.com" title="M'envoyer un email"><i class="fa-regular fa-envelope"></i></a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <div id="media-modal" class="modal">
+        <div style="position: absolute; inset: 0; z-index: -1;" onclick="closeMediaModal()"></div>
+        
+        <div class="modal-image-section">
+            <button class="modal-nav-btn modal-prev" onclick="navigateMedia(-1)"><i class="fa-solid fa-chevron-left"></i></button>
+            
+            <img id="modal-img" src="" alt="Vue détaillée" style="display: none;" onclick="closeMediaModal()">
+            <video id="modal-vid" controls style="display: none; width: 100%; max-height: 90vh; border-radius: 8px; background: black;"></video>
+            
+            <button class="modal-nav-btn modal-next" onclick="navigateMedia(1)"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+        
+        <div class="modal-text-section">
+            <h3 id="modal-title">Titre</h3>
+            <div class="modal-desc-content" id="modal-desc">Description...</div>
+            
+            <button onclick="closeMediaModal()" class="btn btn-danger" style="width: 100%; justify-content: center; font-size: 1.1rem; padding: 15px; margin-top: auto;">
+                Fermer l'aperçu <i class="fa-solid fa-times" style="margin-left: 10px;"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let currentProjectId = null;
+        let currentMediaIndex = 0;
+
+        // --- DONNÉES DES PROJETS ---
+        const projectsData = {
+            'stage2': {
+                title: "Stage de 2ème année", 
+                subtitle: "Développement Web & Applicatif • E.T.S.E",
+                cover: "carte-entreprise.png",
+                shortDesc: "Site Web & Logiciel Python/OpenCV", 
+                techs: ["HTML/CSS/JS", "Python", "OpenCV"],
+                summary: "Ce projet comprend deux parties majeures : le développement d'un site web institutionnel moderne en HTML/CSS/JS et la création d'un outil métier en Python. L'application utilise OpenCV pour détecter les ouvertures sur des plans d'architecte et calcule automatiquement la surface à enduire.",
+                links: [
+                    { url: "https://github.com/David6104/mon-projet-stage-2eme-annee.git", label: "Code Source", icon: "fa-brands fa-github", type: "btn-outline" },
+                    { url: "https://etse-facades.netlify.app/", label: "Voir le Site Live", icon: "fa-solid fa-globe", type: "btn-primary" },
+                    { url: "David_GASPAR_OLIVEIRA_rapport_de_stage_2eme_annee.pdf", label: "Rapport de Stage", icon: "fa-solid fa-file-pdf", type: "btn-outline" }
+                ],
+                media: [
+                    { 
+                        type: "image", 
+                        src: "accueil-site.png", 
+                        title: "1. Site Web Institutionnel", 
+                        desc: "Création d'un site web vitrine moderne, responsive et optimisé pour le référencement (SEO). Déploiement sur Netlify." 
+                    },
+                    { 
+                        type: "image", 
+                        src: "formulaire-site.png", 
+                        title: "Formulaire Serverless", 
+                        desc: "Mise en place d'un formulaire de demande de devis fonctionnel via une architecture Serverless avec l'API Formspree." 
+                    },
+                    { 
+                        type: "image", 
+                        src: "application-mesure.png", 
+                        title: "2. Application SmartMeasure Enduit", 
+                        desc: "Développement d'un outil métier en Python pour automatiser la prise de cotes. L'application utilise OpenCV pour détecter les ouvertures sur les plans et calcule la surface nette à enduire. L'interface graphique a été conçue avec Tkinter." 
+                    },
+                    {
+                        type: "video",
+                        src: "2026-04-08 09-48-47.mp4",
+                        title: "Présentation vidéo de l'application",
+                        desc: "Démonstration de l'outil Python de mesure de surfaces avec OpenCV."
+                    },
+                    {
+                        type: "image",
+                        src: "fichier-cvs-test2-application.png",
+                        title: "Fichier CSV généré",
+                        desc: "Aperçu du fichier CSV exporté par l'application, contenant les résultats des mesures."
+                    }
+                ]
+            },
+            'eatsmart': {
+                title: "EatSmart", 
+                subtitle: "Projet • PHP / SQL / TypeScript",
+                cover: "https://static.wixstatic.com/media/2ab16a_1ecf8a97bce64fdfbcb4515f688ee524~mv2.png",
+                shortDesc: "Plateforme de restauration en ligne", 
+                techs: ["PHP", "SQL", "TS"],
+                summary: "EatSmart est une solution de restauration en ligne globale, pensée pour fluidifier l'expérience client et faciliter la gestion côté restaurateur. L'application permet une communication en temps réel entre la salle et la cuisine.",
+                links: [
+                    { url: "https://github.com/David6104/david-api-eatsmart-front", label: "Code Front-End", icon: "fa-brands fa-github", type: "btn-primary" },
+                    { url: "https://github.com/David6104/TP-EatSmart-Endpoints-CRUD-avanc-s", label: "Code Back-End", icon: "fa-brands fa-github", type: "btn-outline" }
+                ],
+                media: [
+                    { 
+                        type: "video", 
+                        src: "2026-04-08 06-45-33.mp4", 
+                        title: "Démonstration Vidéo", 
+                        desc: "Démonstration de l'interface Frontend : Ajout de plats au panier, calcul dynamique du total, et suivi de la commande en temps réel." 
+                    },
+                    { 
+                        type: "image", 
+                        src: "Description du projet.png", 
+                        title: "Architecture de l'application", 
+                        desc: "<b>Fonctionnalités principales</b><br><br><b>3.1 Frontend (eatSmartFront)</b><br> - Consultation du menu et commande en ligne<br> - Suivi du statut de la commande en temps réel<br><br><b>3.2 Backend (eatSmartBack)</b><br> - Gestion des commandes des utilisateurs<br> - Administration du menu et historique<br><br><b>Technologies utilisées :</b><br>Frontend : PHP, HTML, CSS, TypeScript<br>Backend : API REST<br>Base de données : SQL" 
+                    },
+                    { 
+                        type: "image", 
+                        src: "MCD du projet.png", 
+                        title: "Modèle Conceptuel de Données", 
+                        desc: "Schéma représentant la structure de la base de données relationnelle gérant les Articles, les Catégories et les Commandes." 
+                    },
+                    { 
+                        type: "image", 
+                        src: "https://static.wixstatic.com/media/2ab16a_1ecf8a97bce64fdfbcb4515f688ee524~mv2.png", 
+                        title: "Interface Principale", 
+                        desc: "Aperçu de la page de consultation du menu interactif permettant aux utilisateurs de composer leur repas facilement." 
+                    }
+                ]
+            },
+            'flutter': {
+                title: "Application E-Commerce Flutter", 
+                subtitle: "Projet • Développement Mobile • Dart",
+                cover: "logo-flutter.png",
+                shortDesc: "App Mobile Multiplateforme", 
+                techs: ["Flutter", "Dart", "API"],
+                summary: "Développement d'une application e-commerce mobile hybride en Flutter/Dart. Elle intègre la consultation d'articles via une API (Platzi Fake Store), un système d'authentification, la gestion d'un panier et des favoris avec persistance des données, ainsi qu'un historique d'achats.",
+                links: [
+                    { url: "https://github.com/David6104/projet_flutter.git", label: "Code Source", icon: "fa-brands fa-github", type: "btn-primary" }
+                ],
+                media: [
+                    { type: "image", src: "articles-flutter.png", title: "Catalogue d'Articles", desc: "Liste des produits récupérés via API (Platzi Fake Store). Navigation fluide avec possibilité de voir les fiches détaillées des produits." },
+                    { type: "image", src: "panier-flutter.png", title: "Gestion du Panier", desc: "Ajout et retrait d'articles avec sauvegarde persistante du panier de l'utilisateur." },
+                    { type: "image", src: "historique-flutter.png", title: "Historique des Achats", desc: "Affichage des commandes passées après validation du panier par l'utilisateur." },
+                    { type: "image", src: "favoris-flutter.png", title: "Favoris", desc: "Collection d'articles enregistrés par l'utilisateur pour un accès rapide." }
+                ]
+            },
+            'stage1': {
+                title: "Stage de 1ère année", 
+                subtitle: "Application Web de Gestion • WU TAO WANG XUE LONG",
+                cover: "https://static.wixstatic.com/media/2ab16a_cc9fc21a04b840eb83374bb183080f49~mv2.avif",
+                shortDesc: "Gestion centralisée d'adhérents", 
+                techs: ["PHP", "SQL", "Web"],
+                summary: "Développement d'une application web centralisée pour la gestion des adhérents d'une association d'arts martiaux. Mise en place d'un système CRUD complet, d'une authentification sécurisée et de filtres de recherche avancés (WAMP, PHP, MySQL).",
+                links: [
+                    { url: "https://github.com/David6104/mon-projet-stage-1ere-annee", label: "Code Source", icon: "fa-brands fa-github", type: "btn-primary" },
+                    { url: "rapport de stage David GASPAR OLIVEIRA.pdf", label: "Rapport de Stage", icon: "fa-solid fa-file-pdf", type: "btn-outline" }
+                ],
+                media: [
+                    {
+                        type: "video",
+                        src: "présentation vidéo projet stage.mp4",
+                        title: "Présentation de l'application",
+                        desc: "Démonstration des fonctionnalités développées durant mon stage : authentification sécurisée, ajout d'un adhérent avec ses attributs liés (discipline, grade, année) et navigation fluide."
+                    },
+                    {
+                        type: "image",
+                        src: "https://static.wixstatic.com/media/2ab16a_cc9fc21a04b840eb83374bb183080f49~mv2.avif",
+                        title: "Gestion Complète (CRUD)",
+                        desc: "Affichage interactif avec jointures SQL complexes (LEFT JOIN), permettant le filtrage dynamique et la suppression sécurisée des membres."
+                    }
+                ]
+            },
+            'phpsql': {
+                title: "Pokédex PHP/SQL", 
+                subtitle: "Projet • Base de données",
+                cover: "https://static.wixstatic.com/media/2ab16a_b413db0dcf614456bbd0b330ce98c450~mv2.jpeg",
+                shortDesc: "Interface Web CRUD", 
+                techs: ["PHP", "SQL"],
+                summary: "Conception d’un site web dynamique (Pokédex) permettant d’afficher, de gérer et de modifier des données complexes. Ce projet met en œuvre des opérations CRUD sécurisées en PHP liées à une base de données relationnelle.",
+                links: [
+                    { url: "https://github.com/David6104/Pokedex.git", label: "Code Source", icon: "fa-brands fa-github", type: "btn-primary" }
+                ],
+                media: [
+                    {
+                        type: "video",
+                        src: "https://video.wixstatic.com/video/2ab16a_de37fa1f49074ab6bc2930c37d65d7df/480p/mp4/file.mp4",
+                        title: "Démonstration du Pokédex",
+                        desc: "Vidéo de présentation montrant l'ajout, la modification et la suppression de Pokémon dans la base de données via l'interface web."
+                    },
+                    {
+                        type: "image",
+                        src: "https://static.wixstatic.com/media/2ab16a_b413db0dcf614456bbd0b330ce98c450~mv2.jpeg",
+                        title: "Gestion des données (CRUD)",
+                        desc: "Aperçu de l'interface d'administration."
+                    }
+                ]
+            }
+        };
+
+        const projectKeys = Object.keys(projectsData);
+
+        // --- DONNÉES DE LA VEILLE ---
+        const veilleData = {
+            'v1': {
+                title: "L'informatique en 2026 : entre quête de durabilité et révolution quantique",
+                date: "25 mars • 1 min de lecture",
+                cover: "https://static.wixstatic.com/media/2ab16a_bf54c8dccfe84d838f324c4732b6190a~mv2.png",
+                desc: "Analyse des enjeux actuels alliant puissance de calcul inouïe et contraintes énergétiques imposées par la transition écologique.",
+                link: "https://vimotic.net/blog/linformatique-en-2026-entre-quete-de-durabilite-et-revolution-quantique"
+            },
+            'v2': {
+                title: "Tout le monde s'attendait à une révolution quantique en 2026, la vraie surprise est ailleurs",
+                date: "25 mars • 1 min de lecture",
+                cover: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?q=80&w=800",
+                desc: "Retour sur les promesses technologiques : la vraie surprise est bien plus discrète que prévu. Décryptage des avancées réelles.",
+                link: "https://dailygeekshow.com/tout-le-monde-sattendait-a-une-revolution-quantique-en-2026-mais-la-vraie-surprise-est-ailleurs-bien-plus-discrete/"
+            },
+            'v3': {
+                title: "Ordinateur quantique : cas d’usage à expérimenter et ruptures pour 2030",
+                date: "19 mars • 1 min de lecture",
+                cover: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=800",
+                desc: "Comment les entreprises s'adaptent face à l'émergence des technologies quantiques et anticipent les ruptures structurelles à venir.",
+                link: "https://lehub.bpifrance.fr/ordinateur-quantique-des-cas-dusage-a-experimenter-aujourdhui-des-ruptures-a-preparer-pour-2030/"
+            }
+        };
+
+        // --- GÉNÉRATION DYNAMIQUE DES GRILLES ---
+        function renderGrids() {
+            // Projets
+            const pGrid = document.getElementById('projects-grid');
+            pGrid.innerHTML = '';
+            for (const [key, data] of Object.entries(projectsData)) {
+                // Style object-fit pour s'assurer que les logos/cartes ne soient pas rognés
+                let imgStyle = (key === 'flutter' || key === 'stage2') ? 'style="object-fit: contain; padding: 20px;"' : '';
+                
+                pGrid.innerHTML += `
+                    <div class="portfolio-item" onclick="openProjectDetail('${key}')">
+                        <img src="${data.cover}" alt="${data.title}" ${imgStyle}>
+                        <div class="portfolio-item-overlay">
+                            <div class="code-title">const projet = {</div>
+                            <div class="code-line"><span class="code-key">&nbsp;&nbsp;id:</span> <span class="code-string">"${data.title}"</span>,</div>
+                            <div class="code-line"><span class="code-key">&nbsp;&nbsp;desc:</span> <span class="code-string">"${data.shortDesc}"</span>,</div>
+                            <div class="code-line"><span class="code-key">&nbsp;&nbsp;techs:</span> [${data.techs.map(t => `<span class="code-string">"${t}"</span>`).join(', ')}]</div>
+                            <div class="code-title">};</div>
+                        </div>
+                    </div>`;
+            }
+
+            // Veille
+            const vGrid = document.getElementById('veille-grid');
+            vGrid.innerHTML = '';
+            for (const [key, data] of Object.entries(veilleData)) {
+                vGrid.innerHTML += `
+                    <div class="wix-card" onclick="openVeilleDetail('${key}')">
+                        <img src="${data.cover}" alt="${data.title}" class="wix-card-img">
+                        <div class="wix-card-content">
+                            <h3 class="wix-card-title">${data.title}</h3>
+                            <p class="wix-card-desc">${data.desc}</p>
+                            <div class="wix-card-footer">
+                                <div class="wix-avatar"><i class="fa-solid fa-user" style="color:white; font-size:12px;"></i></div>
+                                <div class="wix-meta-text">
+                                    <span class="wix-author">davidgasparoliveir</span>
+                                    <span class="wix-date">${data.date}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+            }
+        }
+
+        // --- GESTION NAVIGATION SPA ---
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+            
+            document.getElementById(pageId).classList.add('active');
+            
+            let menuId = pageId;
+            if (pageId === 'projet-details') menuId = 'projets';
+            if (pageId === 'veille-details') menuId = 'veille';
+            const activeLink = document.querySelector(`.nav-link[onclick="showPage('${menuId}')"]`);
+            if(activeLink) activeLink.classList.add('active');
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // --- DÉTAILS PROJET ---
+        function openProjectDetail(projectId) {
+            const project = projectsData[projectId];
+            if(!project) return;
+
+            document.getElementById('detail-title').innerText = project.title;
+            document.getElementById('detail-subtitle').innerText = project.subtitle;
+
+            // Liens 
+            let linksHtml = '';
+            project.links.forEach(link => {
+                linksHtml += `<a href="${link.url}" target="_blank" class="btn ${link.type}"><i class="${link.icon}"></i> ${link.label}</a>`;
+            });
+            document.getElementById('detail-links').innerHTML = linksHtml;
+
+            // Résumé explicatif
+            document.getElementById('detail-summary').innerHTML = project.summary;
+
+            // Galerie (Images et Vidéos)
+            const gallery = document.getElementById('detail-gallery');
+            gallery.innerHTML = '';
+            
+            project.media.forEach((m, index) => {
+                let thumbnailHtml = '';
+                let extraStyles = '';
+                // Centrage pour images spécifiques
+                if(m.src === 'carte-entreprise.jpg' || m.src === 'logo-flutter.png' || m.src === 'panier-flutter.png' || m.src === 'historique-flutter.png' || m.src === 'articles-flutter.png' || m.src === 'favoris-flutter.png' || m.src === 'MCD du projet.png' || m.src === 'Description du projet.png' || m.src === 'fichier-cvs-test2-application.png') {
+                     extraStyles = 'object-fit: contain; padding:10px;';
+                }
+
+                if(m.type === 'video') {
+                    thumbnailHtml = `
+                        <video src="${m.src}" muted loop playsinline onmouseover="this.play()" onmouseout="this.pause()" style="pointer-events: none; object-fit: cover;"></video>
+                        <div class="play-icon-overlay"><i class="fa-solid fa-circle-play"></i></div>
+                    `;
+                } else {
+                    thumbnailHtml = `<img src="${m.src}" alt="${m.title}" style="${extraStyles}">`;
+                }
+
+                gallery.innerHTML += `
+                    <div class="gallery-img-wrapper" onclick="openMediaModal('${projectId}', ${index})">
+                        ${thumbnailHtml}
+                    </div>`;
+            });
+
+            // Boutons Précédent / Suivant
+            const currentIndex = projectKeys.indexOf(projectId);
+            const prevBtn = document.getElementById('prev-project-btn');
+            const nextBtn = document.getElementById('next-project-btn');
+
+            if (currentIndex > 0) {
+                prevBtn.style.visibility = 'visible';
+                prevBtn.onclick = () => openProjectDetail(projectKeys[currentIndex - 1]);
+            } else {
+                prevBtn.style.visibility = 'hidden';
+            }
+
+            if (currentIndex < projectKeys.length - 1) {
+                nextBtn.style.visibility = 'visible';
+                nextBtn.onclick = () => openProjectDetail(projectKeys[currentIndex + 1]);
+            } else {
+                nextBtn.style.visibility = 'hidden';
+            }
+
+            showPage('projet-details');
+        }
+
+        // --- DÉTAILS VEILLE ---
+        function openVeilleDetail(veilleId) {
+            const article = veilleData[veilleId];
+            if(!article) return;
+
+            document.getElementById('vd-title').innerText = article.title;
+            document.getElementById('vd-date').innerText = article.date;
+            document.getElementById('vd-img').src = article.cover;
+            document.getElementById('vd-desc').innerText = article.desc;
+            document.getElementById('vd-link').href = article.link;
+
+            showPage('veille-details');
+        }
+
+        // --- MODAL MEDIA (Navigation incluse) ---
+        function loadMediaIntoModal() {
+            const mediaList = projectsData[currentProjectId].media;
+            const media = mediaList[currentMediaIndex];
+            
+            const modalImg = document.getElementById('modal-img');
+            const modalVid = document.getElementById('modal-vid');
+            
+            if (media.type === 'video') {
+                modalImg.style.display = 'none';
+                modalVid.style.display = 'block';
+                modalVid.src = media.src;
+                modalVid.play();
+            } else {
+                modalVid.style.display = 'none';
+                modalVid.pause();
+                modalImg.style.display = 'block';
+                modalImg.src = media.src;
+            }
+
+            document.getElementById('modal-title').innerHTML = media.title;
+            document.getElementById('modal-desc').innerHTML = media.desc;
+
+            // Afficher ou masquer les flèches de navigation
+            document.querySelector('.modal-prev').style.display = currentMediaIndex > 0 ? 'flex' : 'none';
+            document.querySelector('.modal-next').style.display = currentMediaIndex < mediaList.length - 1 ? 'flex' : 'none';
+        }
+
+        function openMediaModal(projectId, mediaIndex) {
+            currentProjectId = projectId;
+            currentMediaIndex = mediaIndex;
+            
+            loadMediaIntoModal();
+            
+            document.getElementById('media-modal').classList.add('active');
+            document.body.style.overflow = 'hidden'; 
+        }
+
+        function navigateMedia(direction) {
+            event.stopPropagation(); 
+            const mediaList = projectsData[currentProjectId].media;
+            currentMediaIndex += direction;
+            
+            // Sécurité
+            if(currentMediaIndex < 0) currentMediaIndex = 0;
+            if(currentMediaIndex >= mediaList.length) currentMediaIndex = mediaList.length - 1;
+            
+            loadMediaIntoModal();
+        }
+
+        function closeMediaModal() {
+            document.getElementById('media-modal').classList.remove('active');
+            document.getElementById('modal-vid').pause();
+            document.body.style.overflow = 'auto'; 
+        }
+
+        // --- INITIALISATION ---
+        document.addEventListener('DOMContentLoaded', () => {
+            renderGrids();
+        });
+
+    </script>
+</body>
+</html>

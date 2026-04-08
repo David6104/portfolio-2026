@@ -1,0 +1,97 @@
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;700&family=Quicksand:wght@400;500;600;700&display=swap');
+
+:root {
+    --bg-color: #F7F5F0;       /* Fond crème Wix */
+    --surface-color: #ffffff;  /* Blanc pur pour les cartes */
+    --text-main: #496E83;      /* Bleu ardoise Wix */
+    --accent: #80B1FF;         /* Bleu clair Wix */
+    --border: rgba(73, 110, 131, 0.2); 
+    --shadow-sm: 0 4px 6px -1px rgba(73, 110, 131, 0.1);
+    --shadow-md: 0 10px 15px -3px rgba(73, 110, 131, 0.15);
+    --transition: all 0.3s ease;
+    --font-heading: 'EB Garamond', serif;
+    --font-body: 'Quicksand', sans-serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    font-family: var(--font-body);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+}
+
+.container { max-width: 1000px; margin: 120px auto 60px; padding: 0 24px; }
+.mt-20 { margin-top: 20px; } .mt-40 { margin-top: 40px; } .mb-20 { margin-bottom: 20px; }
+.text-center { text-align: center; }
+
+/* --- MENU DE NAVIGATION --- */
+.navbar {
+    position: fixed; top: 0; left: 0; width: 100%;
+    background: rgba(247, 245, 240, 0.95); backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+    display: flex; justify-content: center; align-items: center;
+    padding: 20px 0; z-index: 1000;
+}
+.nav-links { display: flex; gap: 40px; list-style: none; }
+.nav-links a {
+    text-decoration: none; color: var(--text-main);
+    font-family: var(--font-body); font-weight: 600; font-size: 1.1rem; 
+    transition: var(--transition); opacity: 0.7;
+}
+.nav-links a:hover, .nav-links a.active { opacity: 1; font-weight: 700; border-bottom: 2px solid var(--text-main); padding-bottom: 4px; }
+
+/* --- TYPOGRAPHIE --- */
+h1, h2, h3 { font-family: var(--font-heading); color: var(--text-main); font-weight: 500; }
+h1 { font-size: 3.5rem; line-height: 1.1; margin-bottom: 15px; }
+h2 { font-size: 2.5rem; margin-bottom: 25px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+.subtitle { font-size: 1.2rem; opacity: 0.8; font-weight: 600; max-width: 800px; margin-bottom: 30px; }
+
+/* --- BOUTONS --- */
+.btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 12px 24px; font-weight: 700; border-radius: 5px; 
+    text-decoration: none; transition: var(--transition); cursor: pointer;
+    font-family: var(--font-body);
+}
+.btn-primary { background: var(--text-main); color: var(--bg-color); border: 1px solid var(--text-main); }
+.btn-primary:hover { background: transparent; color: var(--text-main); }
+.btn-outline { background: transparent; color: var(--text-main); border: 1px solid var(--text-main); }
+.btn-outline:hover { background: var(--text-main); color: var(--bg-color); }
+
+/* --- GRILLES --- */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+.grid-3 { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px; }
+
+/* --- CARTES WIX (Projets & Veille) --- */
+.wix-card {
+    background: var(--surface-color); border: 1px solid var(--border);
+    display: flex; flex-direction: column; text-decoration: none; color: inherit;
+    transition: var(--transition); height: 100%; border-radius: 8px; overflow: hidden;
+}
+.wix-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-md); border-color: var(--text-main); }
+.wix-card-img { width: 100%; height: 240px; object-fit: cover; border-bottom: 1px solid var(--border); }
+.wix-card-content { padding: 30px; display: flex; flex-direction: column; flex-grow: 1; }
+.wix-card-title { font-size: 1.8rem; line-height: 1.2; margin-bottom: 15px; }
+.wix-card-desc { font-size: 1.05rem; margin-bottom: 25px; flex-grow: 1; opacity: 0.85; white-space: pre-line;}
+
+/* Pied de carte Wix */
+.wix-card-footer { display: flex; align-items: center; border-top: 1px solid var(--border); padding-top: 15px; margin-top: auto;}
+.wix-avatar { width: 35px; height: 35px; border-radius: 50%; background: #cccccc; margin-right: 12px; flex-shrink: 0; display:flex; align-items:center; justify-content:center;}
+.wix-meta-text { display: flex; flex-direction: column; }
+.wix-author { font-size: 0.9rem; font-weight: 700; }
+.wix-date { font-size: 0.8rem; opacity: 0.7; display: flex; align-items: center; gap: 5px; font-weight: 600;}
+
+/* --- CONTACT --- */
+.contact-item { display: flex; align-items: center; gap: 20px; padding: 20px; background: var(--surface-color); border: 1px solid var(--border); text-decoration: none; color: var(--text-main); transition: var(--transition); font-weight: 600; margin-bottom: 15px; border-radius: 8px;}
+.contact-item i { font-size: 1.8rem; color: var(--text-main); }
+.contact-item:hover { border-color: var(--text-main); background: var(--text-main); color: var(--bg-color); }
+.contact-item:hover i { color: var(--bg-color); }
+
+@media (max-width: 768px) {
+    h1 { font-size: 2.8rem; }
+    .grid-2 { grid-template-columns: 1fr; }
+    .nav-links { gap: 20px; font-size: 0.9rem; }
+}
